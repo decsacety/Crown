@@ -282,7 +282,7 @@ namespace memory_globals
     {
         _default_allocator = new (_buffer) HeapAllocator();
         _default_scratch_allocator = new 
-            (_buffer + sizeof(HeapAllocator)) ScratchAllocator(*_default_scratch_allocator, 1024*1024);
+            (_buffer + sizeof(HeapAllocator)) ScratchAllocator(*_default_allocator, 1024*1024);
     }
 
     void shutdown(void)

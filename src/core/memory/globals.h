@@ -19,7 +19,7 @@ namespace crown
 
         //Destroys the allocators created with memory_globals::init()
         //Should be the last call of the program.
-        void shutdowm(void);
+        void shutdown(void);
     }// namespace memory_globals
 
 }//namespace crown

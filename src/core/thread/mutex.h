@@ -11,7 +11,7 @@ namespace crown
     struct Mutex
     {
         struct Private* _priv;
-        CE_ALIGN_DECL(16, u8, _data[64]);
+        CE_ALIGN_DECL(16, u8 _data[64]);
 
         Mutex();
         ~Mutex();
@@ -23,5 +23,5 @@ namespace crown
         void unlock();
         void* native_handle();
     };
-    
+
 }//namespace crown

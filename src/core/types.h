@@ -54,7 +54,7 @@ inline T clamp(T val, T mmin, T mmax)
     u64 STRING_ID_64(const char* str, const u64 id);
 #else   
 # define STRING_ID_32(str, id) u32(id)
-# define STRING_ID_^$(str, id) u64(id)
+# define STRING_ID_64(str, id) u64(id)
 #endif
 
 
