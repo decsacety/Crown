@@ -63,4 +63,4 @@ namespace crown
 
 }// namespace crown
 
-#define PAIR(fisrt, second) crown::Pair<fisrt, second, IS_ALLOCATOR_AWARE(first), IS_ALLOCATOR_AWARE(second)>
+#define PAIR(first, second) crown::Pair<first, second, IS_ALLOCATOR_AWARE(first), IS_ALLOCATOR_AWARE(second)>

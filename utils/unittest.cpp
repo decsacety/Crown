@@ -3,8 +3,8 @@
 #include "core/containers/pair.inl"
 #include "core/memory/memory.inl"
 #include "core/memory/temp_allocator.inl"
-// #include "core/murmur.h"
-// #include "core/strings/string.inl"
+#include "core/murmur.h"
+#include "core/strings/string.inl"
 // #include "core/strings/string_id.inl"
 // #include "core/strings/string_stream.inl"
 // #include "core/strings/string_view.inl"
@@ -163,9 +163,6 @@ namespace crown
 			ENSURE(array::capacity(v) == 3);
 
 			array::grow(v, 0);
-			ENSURE(array::capacity(v) == 5);
-
-			array::grow(v, 0);
 			ENSURE(array::capacity(v) == 7);
 
 			array::grow(v, 20);
@@ -292,6 +289,164 @@ namespace crown
 
 	}
 
+	static void test_containers_pair() {
+		Allocator& a = default_allocator();
+
+		struct NoAware 
+		{
+			int _value;
+
+			NoAware() {}
+			NoAware(int v) :_value(v) {}
+			~NoAware() {}
+
+			int GetValue() const { return _value; }
+		};
+
+		struct HasAware 
+		{
+			ALLOCATOR_AWARE;
+
+			Allocator& _allocator;
+			int _value;
+
+			HasAware(Allocator& a) :_allocator(a) {}
+			~HasAware() {}
+
+			int GetValue() const { return _value; }
+			void SetValue(int v) { _value = v; }
+		};
+
+		//Pair<T1, T2,0,0>
+		{
+			NoAware no1(1);
+			NoAware no2(2);
+			NoAware no3(3);
+			NoAware no4(4);
+
+			PAIR(NoAware, NoAware) pair1(no1, no2);
+			ENSURE(pair1.first.GetValue() == 1);
+			ENSURE(pair1.second.GetValue() == 2);
+
+			PAIR(NoAware, NoAware) pair2(no3, no4);
+			ENSURE(pair2.first.GetValue() == 3);
+			ENSURE(pair2.second.GetValue() == 4);
+
+			swap(pair1, pair2);
+			ENSURE(pair2.first.GetValue() == 1);
+			ENSURE(pair2.second.GetValue() == 2);
+			ENSURE(pair1.first.GetValue() == 3);
+			ENSURE(pair1.second.GetValue() == 4);
+		}
+
+		//Pair<T1, T2, 1,0>
+		{
+			HasAware has1(a);  has1.SetValue(1);
+			NoAware no2(2);
+			HasAware has3(a); has3.SetValue(3);
+			NoAware no4(4);
+
+			PAIR(HasAware, NoAware) pair1(has1, no2);
+			ENSURE(pair1.first.GetValue() == 1);
+			ENSURE(pair1.second.GetValue() == 2);
+
+			PAIR(HasAware, NoAware) pair2(has3, no4);
+			ENSURE(pair2.first.GetValue() == 3);
+			ENSURE(pair2.second.GetValue() == 4);
+			
+			swap(pair1, pair2);
+			ENSURE(pair1.first.GetValue() == 3);
+			ENSURE(pair1.second.GetValue() == 4);
+			ENSURE(pair2.first.GetValue() == 1);
+			ENSURE(pair2.second.GetValue() == 2);
+		}
+
+		//Pair<T1, T2,0,1>
+		{
+			NoAware no1(1);
+			HasAware has2(a); has2.SetValue(2);
+			NoAware no3(3);
+			HasAware has4(a); has4.SetValue(4);
+
+			PAIR(NoAware, HasAware) pair1(no1, has2);
+			ENSURE(pair1.first.GetValue() == 1);
+			ENSURE(pair1.second.GetValue() == 2);
+
+			PAIR(NoAware, HasAware) pair2(no3, has4);
+			ENSURE(pair2.first.GetValue() == 3);
+			ENSURE(pair2.second.GetValue() == 4);
+
+			swap(pair1, pair2);
+			ENSURE(pair2.first.GetValue() == 1);
+			ENSURE(pair2.second.GetValue() == 2);
+			ENSURE(pair1.first.GetValue() == 3);
+			ENSURE(pair1.second.GetValue() == 4);
+		}
+
+		//Pair<T1, T2,1,1>
+		{
+			HasAware has1(a); has1.SetValue(1);
+			HasAware has2(a); has2.SetValue(2);
+			HasAware has3(a); has3.SetValue(3);
+			HasAware has4(a); has4.SetValue(4);
+
+			PAIR(HasAware, HasAware) pair1(has1, has2);
+			ENSURE(pair1.first.GetValue() == 1);
+			ENSURE(pair1.second.GetValue() == 2);
+
+			PAIR(HasAware, HasAware) pair2(has3, has4);
+			ENSURE(pair2.first.GetValue() == 3);
+			ENSURE(pair2.second.GetValue() == 4);
+
+			swap(pair1, pair2);
+			ENSURE(pair2.first.GetValue() == 1);
+			ENSURE(pair2.second.GetValue() == 2);
+			ENSURE(pair1.first.GetValue() == 3);
+			ENSURE(pair1.second.GetValue() == 4);
+		}
+
+		// Pair<T1, T2, 1, 0>::Pair(Allocator&a)
+		// Pair<T1, T2, 1, 1>::Pair(Allocator&a)
+		{
+			PAIR(HasAware, NoAware) pair1(a);
+			ENSURE(&pair1.first._allocator == &a);
+
+			PAIR(HasAware, HasAware) pair2(a);
+			ENSURE(&pair2.first._allocator == &a);
+			ENSURE(&pair2.second._allocator == &a);
+
+		}
+
+	}
+
+	static void test_murmur_hash()
+	{
+		//murmur32()
+		{
+			u32 hash, seed;
+
+			seed = 0;
+			hash = murmur32("abcdefghijk", 11, seed);
+			ENSURE(hash == 0x4a7439a6U);
+
+			seed = 0x0BADBEEF;
+			hash = murmur32("abcdefghijk", 11, seed);
+			ENSURE(hash == 0xca73e643U);
+		}
+
+		//murmur64
+		{
+			u64 hash, seed;
+
+			seed = 0;
+			hash = murmur64("abcdefghijk", 11, seed);
+			ENSURE(hash == 0xfeff07a18c726536ULL);
+
+			seed = 0x0BADBEEF;
+			hash = murmur64("abcdefghijk", 11, seed);
+			ENSURE(hash == 0x121f16453e7e7f16ULL);
+		}
+	}
 
 #define RUN_TEST(name)    \
 	do{					  \
@@ -304,6 +459,9 @@ namespace crown
 		memory_globals::init();
 		RUN_TEST(test_default_allocator);
 		RUN_TEST(test_new_delete);
+		RUN_TEST(test_array);
+		RUN_TEST(test_containers_pair);
+		RUN_TEST(test_murmur_hash);
 		memory_globals::shutdown();
 		return EXIT_SUCCESS;
 	}

@@ -63,6 +63,9 @@
     <ClInclude Include="..\..\..\src\core\murmur.h">
       <Filter>source\core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\core\strings\string_id.h">
+      <Filter>source\core\strings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\core\error\error.inl">
@@ -74,7 +77,7 @@
     <None Include="..\..\..\src\core\memory\temp_allocator.inl">
       <Filter>source\core\memory</Filter>
     </None>
-    <None Include="..\..\..\src\core\strings\strings.inl">
+    <None Include="..\..\..\src\core\strings\string.inl">
       <Filter>source\core\strings</Filter>
     </None>
     <None Include="..\..\..\src\core\thread\scoped_mutex.inl">
@@ -88,6 +91,15 @@
     </None>
     <None Include="..\..\..\src\core\functional.inl">
       <Filter>source\core</Filter>
+    </None>
+    <None Include="..\..\..\src\core\strings\string_id.inl">
+      <Filter>source\core\strings</Filter>
+    </None>
+    <None Include="..\..\..\src\core\strings\string_stream.inl">
+      <Filter>source\core\strings</Filter>
+    </None>
+    <None Include="..\..\..\src\core\strings\string_view.inl">
+      <Filter>source\core\strings</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

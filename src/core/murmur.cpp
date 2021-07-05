@@ -2,7 +2,6 @@
 */
 
 #include"core/murmur.h"
-
 namespace crown
 {
 \

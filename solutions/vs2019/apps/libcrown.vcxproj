@@ -29,6 +29,7 @@
     <ClInclude Include="..\..\..\src\core\memory\types.h" />
     <ClInclude Include="..\..\..\src\core\murmur.h" />
     <ClInclude Include="..\..\..\src\core\platform.h" />
+    <ClInclude Include="..\..\..\src\core\strings\string_id.h" />
     <ClInclude Include="..\..\..\src\core\thread\mutex.h" />
     <ClInclude Include="..\..\..\src\core\types.h" />
   </ItemGroup>
@@ -39,7 +40,10 @@
     <None Include="..\..\..\src\core\functional.inl" />
     <None Include="..\..\..\src\core\memory\memory.inl" />
     <None Include="..\..\..\src\core\memory\temp_allocator.inl" />
-    <None Include="..\..\..\src\core\strings\strings.inl" />
+    <None Include="..\..\..\src\core\strings\string.inl" />
+    <None Include="..\..\..\src\core\strings\string_id.inl" />
+    <None Include="..\..\..\src\core\strings\string_stream.inl" />
+    <None Include="..\..\..\src\core\strings\string_view.inl" />
     <None Include="..\..\..\src\core\thread\scoped_mutex.inl" />
   </ItemGroup>
   <ItemGroup>
