@@ -5,9 +5,9 @@
 #include "core/memory/temp_allocator.inl"
 #include "core/murmur.h"
 #include "core/strings/string.inl"
-// #include "core/strings/string_id.inl"
-// #include "core/strings/string_stream.inl"
-// #include "core/strings/string_view.inl"
+#include "core/strings/string_id.inl"
+#include "core/strings/string_stream.inl"
+#include "core/strings/string_view.inl"
 
 #include<stdlib.h>
 #include<stdio.h>
@@ -353,7 +353,7 @@ namespace crown
 			PAIR(HasAware, NoAware) pair2(has3, no4);
 			ENSURE(pair2.first.GetValue() == 3);
 			ENSURE(pair2.second.GetValue() == 4);
-			
+
 			swap(pair1, pair2);
 			ENSURE(pair1.first.GetValue() == 3);
 			ENSURE(pair1.second.GetValue() == 4);
@@ -448,6 +448,37 @@ namespace crown
 		}
 	}
 
+	static void test_string_inline()
+	{
+		// snprintf()
+		{
+			char s[128];
+			snprintf(s, 128, "Hello %d %s", 10, "Boy!");
+			ENSURE(strcmp(s, "Hello 10 Boy!") == 0);
+		}
+
+		// strlen32()
+		{
+			ENSURE(strlen32("Hello!") == 6);
+			ENSURE(strlen32("") == 0);
+		}
+
+		//skip_spaces()
+		{
+
+		}
+	}
+
+	static void test_string_stream()
+	{
+
+	}
+
+	static void test_string_view()
+	{
+
+	}
+
 #define RUN_TEST(name)    \
 	do{					  \
 		name();			  \
@@ -462,6 +493,9 @@ namespace crown
 		RUN_TEST(test_array);
 		RUN_TEST(test_containers_pair);
 		RUN_TEST(test_murmur_hash);
+		RUN_TEST(test_string_inline);
+		RUN_TEST(test_string_stream);
+		RUN_TEST(test_string_view);
 		memory_globals::shutdown();
 		return EXIT_SUCCESS;
 	}
