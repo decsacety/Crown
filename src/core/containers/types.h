@@ -1,5 +1,7 @@
 /*
 */
+#pragma once
+
 #include"core/containers/pair.h"
 #include"core/functional.h"
 #include"core/memory/types.h"

@@ -97,7 +97,7 @@ namespace crown
             _p += sizeof(void*);
             _p = (char*)memory::align_top(_p, align);
         }
-        void* result = *_p;
+        void* result = _p;
         _p +=size;
         return result;
     }

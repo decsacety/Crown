@@ -66,6 +66,15 @@
     <ClInclude Include="..\..\..\src\core\strings\string_id.h">
       <Filter>source\core\strings</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\src\core\strings\type.h">
+      <Filter>source\core\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\strings\string_stream.h">
+      <Filter>source\core\strings</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\core\strings\string_view.h">
+      <Filter>source\core\strings</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\src\core\error\error.inl">
@@ -99,6 +108,9 @@
       <Filter>source\core\strings</Filter>
     </None>
     <None Include="..\..\..\src\core\strings\string_view.inl">
+      <Filter>source\core\strings</Filter>
+    </None>
+    <None Include="..\..\..\src\core\strings\strings.inl">
       <Filter>source\core\strings</Filter>
     </None>
   </ItemGroup>

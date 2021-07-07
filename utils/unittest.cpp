@@ -465,17 +465,161 @@ namespace crown
 
 		//skip_spaces()
 		{
+			char s1[] = " \tHello Boy!\tCoool!";
+			const char* s2;
 
+			s2 = skip_space(s1);
+			ENSURE(*s2 == 'H');
+
+			while (!isspace(*s2)) ++s2;
+			s2 = skip_space(s2);
+			ENSURE(*s2 == 'B');
+
+			while (!isspace(*s2)) ++s2;
+			s2 = skip_space(s2);
+			ENSURE(*s2 == 'C');
 		}
+
+		// skip_block()
+		{
+			const char* s;
+
+			s = skip_block("[Hello]Baby!", '[', ']');
+			ENSURE(*s == 'B');
+
+			s = skip_block("[Hello Baby!", '[', ']');
+			ENSURE(s == NULL);
+
+			s = skip_block("[Hello[Baby!]Woo!]NoMan!", '[', ']');
+			ENSURE(*s == 'N');
+		}
+
+		// strn1()
+		{
+			const char* s;
+
+			s = strnl("Hello!\nBoy!");
+			ENSURE(*s == 'B');
+
+			s = strnl("Hello!");
+			ENSURE(s[-1] == '!');
+		}
+
+		//wildcmp()
+		{
+			ENSURE(wildcmp("a.jpg", "b.jpg")==0);
+			ENSURE(wildcmp("?.jpg", "b.jpg") == 1);
+			ENSURE(wildcmp("*.jpg", "Hello.jpg") == 1);
+			ENSURE(wildcmp("*l*.jpg", "Hello.jpg") == 1);
+			ENSURE(wildcmp("*lo.jpg", "Hello.jpg") == 1);
+			ENSURE(wildcmp("*llo.jpg", "Hello.jpg") == 1);
+			ENSURE(wildcmp("*?.jpg", "Hello.jpg") == 1);
+			ENSURE(wildcmp("Hello.*", "Hello.jpg") == 1);
+			ENSURE(wildcmp("H*llo.*", "Hello.jpg") == 1);
+			ENSURE(wildcmp("He*o.j?g", "Hello.jpg") == 1);
+			ENSURE(wildcmp("H*.jpg", "Hello.jpa") == 0);
+		}
+
+		// str_has_prefix()
+		{
+			ENSURE(str_has_prefix("Hello!Boy!", "Hello!") == true);
+			ENSURE(str_has_prefix("Hello!Boy!", "Abc!") == false);
+		}
+
+		// str_has_suffix()
+		{
+			ENSURE(str_has_suffix("Hello!Boy!", "Boy!") == true);
+			ENSURE(str_has_suffix("Hello!Boy!", "Goy!") == false);
+		}
+
 	}
 
 	static void test_string_stream()
 	{
+		//char
+		{
+			TempAllocator1024 ta;
+			StringStream ss(ta);
+			ss << 'B' << 'a' << 'b' << 'y';
+			ENSURE(strcmp(string_stream::c_str(ss), "Baby") == 0);
+		}
+
+		// const char*
+		{
+			TempAllocator1024 ta;
+			StringStream ss(ta);
+			ss << "Baby";
+			ENSURE(strcmp(string_stream::c_str(ss), "Baby") == 0);
+		}
+
+		// s16/u16
+		{
+			TempAllocator1024 ta;
+			StringStream ss(ta);
+			s16 a = -1;
+			u16 b = 24;
+			ss << a << b;
+			ENSURE(strcmp(string_stream::c_str(ss), "-124") == 0);
+		}
+
+		// s32/u32
+		{
+			TempAllocator1024 ta;
+			StringStream ss(ta);
+			s32 a = -65537;
+			u32 b = 65538;
+			ss << a << b;
+			ENSURE(strcmp(string_stream::c_str(ss), "-6553765538") == 0);
+		}
+
+		// s64/u64
+		{
+			TempAllocator1024 ta;
+			StringStream ss(ta);
+			s64 a = -655370;
+			u64 b = 655380;
+			ss << a << b;
+			ENSURE(strcmp(string_stream::c_str(ss), "-655370655380") == 0);
+		}
+
+		// f32/f64
+		{
+			TempAllocator1024 ta;
+			StringStream ss(ta);
+			f32 a = 1.2f;
+			f64 b = -6.466;
+			ss << a << b;
+			ENSURE(strcmp(string_stream::c_str(ss), "1.2-6.466") == 0);
+		}
 
 	}
 
 	static void test_string_view()
 	{
+		StringView a;
+		ENSURE(a.length() == 0);
+		ENSURE(a.data() == NULL);
+
+		StringView b("hello");
+		ENSURE(b.length() == 5);
+		ENSURE(b == "hello");
+
+		StringView c("hello", 3);
+		ENSURE(c.length() == 3);
+		ENSURE(c == "hel");
+
+		a = "hel";
+		ENSURE(a.length() == 3);
+		ENSURE(a == "hel");
+		ENSURE(a == c);
+		ENSURE(memcmp(a.data(), "hel", 3) == 0);
+		ENSURE(a != b);
+		ENSURE(a < b);
+
+		a = "abC";
+		b = "abc";
+		ENSURE(a < b);
+		ENSURE('C' < 'c');
 
 	}
 

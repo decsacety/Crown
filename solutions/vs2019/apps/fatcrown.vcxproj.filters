@@ -8,4 +8,9 @@
       <UniqueIdentifier>{1a5e7a2c-99ca-4937-8da3-4abd6118e4a4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\device\main_windows.cpp">
+      <Filter>source\device</Filter>
+    </ClCompile>
+  </ItemGroup>
 </Project>

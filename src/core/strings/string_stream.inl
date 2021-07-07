@@ -47,7 +47,7 @@ namespace crown
 
 	inline StringStream& operator<<(StringStream& s, f32 val)
 	{
-		return string_stream::stream_printf(s, "%.8f", val);
+		return string_stream::stream_printf(s, "%.8g", val);
 	}
 
 	inline StringStream& operator<<(StringStream& s, f64 val)
